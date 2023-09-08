@@ -87,7 +87,6 @@ void move() {
     digitalWrite(STEP_PIN, HIGH);
     delayMicroseconds(frequency);
     digitalWrite(STEP_PIN, LOW);
-    delayMicroseconds(frequency);
 }
 
 void readButtons() {
