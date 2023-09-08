@@ -87,44 +87,57 @@ void move() {
     digitalWrite(STEP_PIN, HIGH);
     delayMicroseconds(frequency);
     digitalWrite(STEP_PIN, LOW);
+    delayMicroseconds(frequency);
 }
 
 void readButtons() {
     stopper = !digitalRead(STOPPER_PIN);
+    Serial.print("stopper:"); Serial.println(stopper);
     forwardButton = !digitalRead(fwd_button);
+    Serial.print("forwardButton:"); Serial.println(forwardButton);
     backwardButton = !digitalRead(rev_button);
+    Serial.print("backwardButton:"); Serial.println(backwardButton);
 }
 
 void handleState() {
     if(stopper) {
         state = REVERSE;
+        Serial.println("REVERSE");
         return;
     }
 
     if(forwardButton) {
         if(!isMotorRunning) {
+            digitalWrite(ENABLE_PIN, LOW);
             isMotorRunning = true;
             buttonHold = millis();
             digitalWrite(DIR_PIN, Forward);
             state = AUTO_MOVE;
+            Serial.println("AUTO_MOVE");
         }
         if(isMotorRunning && millis() - buttonHold > holdThreshold) {
             state = MANUAL_MOVE;
+            Serial.println("MANUAL_MOVE");
         }
     } else {
         if(state == MANUAL_MOVE) {
             state = STANDBY;
+            Serial.println("STANDBY");
         }
     }
 }
 
 void stopMotor() {
+    Serial.println("stopMotor");
     isMotorRunning = false;
     digitalWrite(ENABLE_PIN, HIGH);
 }
 
 void reverse() {
+    Serial.println("reverse start");
+    Serial.print("direction1"); Serial.println(direction);
     direction = static_cast<Direction>(direction ^ (Forward ^ Backward));
+    Serial.print("direction2"); Serial.println(direction);
     digitalWrite(DIR_PIN, direction);
     for(size_t i = 0; i < REVERSE_STEPS; ++i) {
         digitalWrite(STEP_PIN, HIGH);
@@ -132,5 +145,8 @@ void reverse() {
         digitalWrite(STEP_PIN, LOW);
         delayMicroseconds(frequency);
     }
+    Serial.print("direction3"); Serial.println(direction);
     direction = static_cast<Direction>(direction ^ (Forward ^ Backward));
+    Serial.print("direction4"); Serial.println(direction);
+    Serial.println("reverse stop");
 }
