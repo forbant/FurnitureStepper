@@ -53,6 +53,7 @@ void setup() {
     Serial.begin(9600);
     pinMode(fwd_button, INPUT_PULLUP);
     pinMode(rev_button, INPUT_PULLUP);
+    pinMode(STOPPER_PIN, INPUT_PULLUP);
     pinMode(STEP_PIN, OUTPUT);
     pinMode(DIR_PIN, OUTPUT);
     pinMode(ENABLE_PIN, OUTPUT);
@@ -115,7 +116,7 @@ void handleState() {
             state = AUTO_MOVE;
             Serial.println("AUTO_MOVE");
         }
-        if(isMotorRunning && millis() - buttonHold > holdThreshold) {
+        if(isMotorRunning && (millis() - buttonHold) > holdThreshold) {
             state = MANUAL_MOVE;
             Serial.println("MANUAL_MOVE");
         }
