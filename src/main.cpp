@@ -6,6 +6,9 @@
 #define STOPPER_PIN_1 4 //  КІНЦЕВИК 1
 #define STOPPER_PIN_2 5 //  КІНЦЕВИК 2
 
+#define LED_PIN_F 0 // ПІН ДЛЯ LED ІНДИКАЦІЇ
+#define LED_PIN_B 0 // ПІН ДЛЯ LED ІНДИКАЦІЇ
+
 #define fwd_button 6 // КНОПКА ВПЕРЕД
 #define rev_button 8 // КНОПКА НАЗАД
 
@@ -52,8 +55,12 @@ void setup()
     pinMode(STEP_PIN, OUTPUT);
     pinMode(DIR_PIN, OUTPUT);
     pinMode(ENABLE_PIN, OUTPUT);
+    pinMode(LED_PIN_F, OUTPUT);
+    pinMode(LED_PIN_B, OUTPUT);
 
     digitalWrite(ENABLE_PIN, HIGH);
+    digitalWrite(LED_PIN_F, LOW);
+    digitalWrite(LED_PIN_B, LOW);
 
     state = STANDBY;
     isMotorRunning = false;
@@ -116,6 +123,8 @@ void handleState()
         digitalWrite(DIR_PIN, Direction::Forward);
         isMotorRunning = true;
         digitalWrite(ENABLE_PIN, LOW);
+        digitalWrite(LED_PIN_B, LOW);
+        digitalWrite(LED_PIN_F, HIGH);
     }
     if (!isMotorRunning && !stopper2 && backwardButton)
     {
@@ -123,6 +132,8 @@ void handleState()
         digitalWrite(DIR_PIN, Direction::Backward);
         isMotorRunning = true;
         digitalWrite(ENABLE_PIN, LOW);
+        digitalWrite(LED_PIN_F, LOW);
+        digitalWrite(LED_PIN_B, HIGH);
     }
 }
 
@@ -131,4 +142,6 @@ void stopMotor()
     state = STANDBY;
     isMotorRunning = false;
     digitalWrite(ENABLE_PIN, HIGH);
+    digitalWrite(LED_PIN_B, LOW);
+    digitalWrite(LED_PIN_F, LOW);
 }
