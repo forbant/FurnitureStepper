@@ -6,8 +6,8 @@
 #define STOPPER_PIN_1 4 //  КІНЦЕВИК 1
 #define STOPPER_PIN_2 5 //  КІНЦЕВИК 2
 
-#define LED_PIN_F 0 // ПІН ДЛЯ LED ІНДИКАЦІЇ
-#define LED_PIN_B 0 // ПІН ДЛЯ LED ІНДИКАЦІЇ
+#define LED_PIN_F 11 // ПІН ДЛЯ LED ІНДИКАЦІЇ
+#define LED_PIN_B 12 // ПІН ДЛЯ LED ІНДИКАЦІЇ
 
 #define fwd_button 6 // КНОПКА ВПЕРЕД
 #define rev_button 8 // КНОПКА НАЗАД
@@ -16,7 +16,7 @@
     Час між імпульсами у мксек. 1000 мксек = 1 мсек = 0.001 сек. Частота проходження імпульсів 1/0.001 = 1 кГц,
     Не рекомендується встановлювати час менше 100 мсек, оскільки частота буде 10 кГц
 */
-#define frequency 640
+#define frequency 450
 
 bool isMotorRunning = false;
 
@@ -59,8 +59,8 @@ void setup()
     pinMode(LED_PIN_B, OUTPUT);
 
     digitalWrite(ENABLE_PIN, HIGH);
-    digitalWrite(LED_PIN_F, LOW);
-    digitalWrite(LED_PIN_B, LOW);
+    digitalWrite(LED_PIN_F, HIGH);
+    digitalWrite(LED_PIN_B, HIGH);
 
     state = STANDBY;
     isMotorRunning = false;
@@ -123,8 +123,8 @@ void handleState()
         digitalWrite(DIR_PIN, Direction::Forward);
         isMotorRunning = true;
         digitalWrite(ENABLE_PIN, LOW);
-        digitalWrite(LED_PIN_B, LOW);
-        digitalWrite(LED_PIN_F, HIGH);
+        digitalWrite(LED_PIN_B, HIGH);
+        digitalWrite(LED_PIN_F, LOW);
     }
     if (!isMotorRunning && !stopper2 && backwardButton)
     {
@@ -132,8 +132,8 @@ void handleState()
         digitalWrite(DIR_PIN, Direction::Backward);
         isMotorRunning = true;
         digitalWrite(ENABLE_PIN, LOW);
-        digitalWrite(LED_PIN_F, LOW);
-        digitalWrite(LED_PIN_B, HIGH);
+        digitalWrite(LED_PIN_F, HIGH);
+        digitalWrite(LED_PIN_B, LOW);
     }
 }
 
@@ -142,6 +142,6 @@ void stopMotor()
     state = STANDBY;
     isMotorRunning = false;
     digitalWrite(ENABLE_PIN, HIGH);
-    digitalWrite(LED_PIN_B, LOW);
-    digitalWrite(LED_PIN_F, LOW);
+    digitalWrite(LED_PIN_B, HIGH);
+    digitalWrite(LED_PIN_F, HIGH);
 }
